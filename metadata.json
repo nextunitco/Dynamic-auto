@@ -1,0 +1,6 @@
+{
+  "name": "Dynamic Auto & Tyre Centre",
+  "description": "Premium redesigned web experience for Dynamic Auto & Tyre Centre, Lagos. Explore vehicle repairs, tyre fitting, wheel balancing, MOT roadworthiness tests, and battery services.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
