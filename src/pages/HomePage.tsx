@@ -61,20 +61,20 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectVehicle 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
             <div>
               <span className="text-xs font-bold text-[#0B3D91] uppercase tracking-wider">
-                FEATURED INVENTORY
+                CLIENT VEHICLES &amp; WORKSHOP SHOWCASE
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold text-[#062B63] mt-1 font-heading">
-                Explore Available Vehicles
+                Inspected &amp; Serviced Vehicles
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-xl">
-                Browse verified client vehicles available for viewing and inspection at our Isolo workshop.
+                Browse client vehicles maintained, inspected, and serviced to precision standards at our Isolo workshop.
               </p>
             </div>
             <button
-              onClick={() => onNavigate('vehicles')}
+              onClick={() => onNavigate('contact')}
               className="text-xs font-semibold text-[#0B3D91] hover:text-[#062B63] inline-flex items-center gap-1 self-start sm:self-auto cursor-pointer"
             >
-              View Full Inventory <ArrowRight className="w-3.5 h-3.5" />
+              Book Vehicle Inspection <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
@@ -111,10 +111,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectVehicle 
 
                 <div className="px-4 pb-4 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
                   <button
-                    onClick={() => onNavigate('vehicles')}
+                    onClick={() => onNavigate('services')}
                     className="text-xs font-semibold text-[#0B3D91] hover:text-[#062B63] cursor-pointer"
                   >
-                    View Details
+                    Workshop Services
                   </button>
                   <a
                     href={createWhatsAppVehicleInquiry(car.title)}
@@ -132,10 +132,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectVehicle 
 
           <div className="mt-10 text-center">
             <button
-              onClick={() => onNavigate('vehicles')}
+              onClick={() => onNavigate('services')}
               className="px-6 py-3 text-xs sm:text-sm font-bold text-white bg-[#0B3D91] hover:bg-[#062B63] rounded-md transition-colors shadow-xs inline-flex items-center gap-2 cursor-pointer"
             >
-              VIEW ALL VEHICLES
+              EXPLORE ALL SERVICES &amp; PRICING
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -306,10 +306,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectVehicle 
           </p>
           <div className="pt-2">
             <button
-              onClick={() => onNavigate('vehicles')}
+              onClick={() => onNavigate('services')}
               className="px-6 py-3 text-xs sm:text-sm font-bold text-white bg-[#F97316] hover:bg-[#EA580C] rounded-md transition-colors shadow-md inline-flex items-center gap-2 cursor-pointer"
             >
-              VIEW OUR VEHICLES
+              EXPLORE OUR SERVICES
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

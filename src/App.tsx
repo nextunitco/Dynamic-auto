@@ -4,14 +4,13 @@ import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ServicesPage } from './pages/ServicesPage';
-import { VehiclesPage } from './pages/VehiclesPage';
 import { ContactPage } from './pages/ContactPage';
 import { DYNAMIC_AUTO_INFO } from './data/businessData';
 import { MessageSquare, ArrowUpRight } from 'lucide-react';
 
 function getPageFromHash(): PageId {
   const hash = window.location.hash.replace('#/', '').replace('#', '').trim();
-  const validPages: PageId[] = ['home', 'about', 'services', 'vehicles', 'contact'];
+  const validPages: PageId[] = ['home', 'about', 'services', 'contact'];
   if (validPages.includes(hash as PageId)) {
     return hash as PageId;
   }
@@ -62,12 +61,6 @@ export function App() {
 
         {currentPage === 'services' && (
           <ServicesPage 
-            onNavigate={handleNavigate} 
-          />
-        )}
-
-        {currentPage === 'vehicles' && (
-          <VehiclesPage 
             onNavigate={handleNavigate} 
           />
         )}

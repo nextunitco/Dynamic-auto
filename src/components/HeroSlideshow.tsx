@@ -97,10 +97,10 @@ export const HeroSlideshow: React.FC<HeroSlideshowProps> = ({ onNavigate }) => {
           {/* Buttons */}
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <button
-              onClick={() => onNavigate('vehicles')}
+              onClick={() => onNavigate('services')}
               className="px-6 py-3 text-xs sm:text-sm font-bold text-white bg-[#F97316] hover:bg-[#EA580C] rounded-md transition-colors shadow-md flex items-center gap-2 cursor-pointer"
             >
-              EXPLORE VEHICLES
+              EXPLORE SERVICES
               <ArrowRight className="w-4 h-4" />
             </button>
             <button

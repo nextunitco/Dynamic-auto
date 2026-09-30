@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Phone, MessageSquare } from 'lucide-react';
 import { DYNAMIC_AUTO_INFO } from '../data/businessData';
 
-export type PageId = 'home' | 'about' | 'services' | 'vehicles' | 'contact';
+export type PageId = 'home' | 'about' | 'services' | 'contact';
 
 interface NavbarProps {
   currentPage: PageId;
@@ -27,7 +27,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
     { id: 'services', label: 'Services' },
-    { id: 'vehicles', label: 'Vehicles' },
     { id: 'contact', label: 'Contact' },
   ];
 
