@@ -1,7 +1,7 @@
 import React from 'react';
-import { DYNAMIC_AUTO_INFO } from '../data/businessData';
 import { PageId } from './Navbar';
-import { Phone, MapPin, Clock, MessageSquare, ArrowUpRight, ShieldCheck } from 'lucide-react';
+import { DYNAMIC_AUTO_INFO, SERVICES_LIST } from '../data/businessData';
+import { MapPin, Phone, Mail, Clock, MessageSquare, ArrowUpRight } from 'lucide-react';
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
@@ -14,130 +14,133 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   };
 
   return (
-    <footer className="bg-zinc-50 border-t border-zinc-200 text-zinc-600 text-sm">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+    <footer className="bg-[#062B63] text-slate-300 text-sm border-t border-blue-950">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-10 mb-10">
           
-          {/* Brand Col */}
-          <div className="md:col-span-1 space-y-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-bold text-sm">
-                DA
-              </div>
-              <span className="font-bold text-zinc-900 text-base">
-                Dynamic Auto <span className="text-orange-600">&amp;</span> Tyre
+          {/* Brand Info with Official Logo */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <img
+                src={DYNAMIC_AUTO_INFO.logo}
+                alt="Dynamic Auto Official Logo"
+                className="w-10 h-10 object-contain rounded bg-white p-0.5 shadow-xs"
+              />
+              <span className="font-bold text-lg text-white font-heading">
+                Dynamic Auto
               </span>
             </div>
-            <p className="text-xs text-zinc-500 leading-relaxed">
-              Professional automotive diagnostics, precision 3D wheel alignment, and genuine manufacturer tyres in Isolo, Lagos.
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Professional automotive maintenance, computer diagnostics, 3D laser wheel alignment, genuine tyres, and quality inspected vehicles in Isolo, Lagos.
             </p>
-            <div className="flex items-center gap-2 text-xs text-zinc-700 font-medium pt-1">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Zero Fake Parts Guarantee</span>
-            </div>
+            <p className="text-xs font-semibold text-[#F97316]">
+              Plot 12, Isolo Expressway, Lagos
+            </p>
           </div>
 
-          {/* Quick Pages Navigation */}
+          {/* Quick Links */}
           <div>
-            <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider mb-3">
-              Explore
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 border-b border-white/10 pb-2">
+              Quick Links
             </h4>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-2.5 text-xs">
               <li>
                 <button
                   onClick={() => handleNav('home')}
-                  className="hover:text-orange-600 transition-colors cursor-pointer"
+                  className="hover:text-white transition-colors cursor-pointer text-slate-300"
                 >
                   Home
                 </button>
               </li>
               <li>
                 <button
+                  onClick={() => handleNav('about')}
+                  className="hover:text-white transition-colors cursor-pointer text-slate-300"
+                >
+                  About Us
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => handleNav('services')}
-                  className="hover:text-orange-600 transition-colors cursor-pointer"
+                  className="hover:text-white transition-colors cursor-pointer text-slate-300"
                 >
-                  Auto Services &amp; Packages
+                  Automotive Services
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => handleNav('tyres')}
-                  className="hover:text-orange-600 transition-colors cursor-pointer"
+                  onClick={() => handleNav('vehicles')}
+                  className="hover:text-white transition-colors cursor-pointer text-slate-300"
                 >
-                  Tyre Centre &amp; Sizing
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => handleNav('workshop')}
-                  className="hover:text-orange-600 transition-colors cursor-pointer"
-                >
-                  Our Facility &amp; Equipment
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => handleNav('booking')}
-                  className="hover:text-orange-600 transition-colors cursor-pointer"
-                >
-                  Cost Estimator &amp; Booking
+                  Vehicles Inventory
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => handleNav('contact')}
-                  className="hover:text-orange-600 transition-colors cursor-pointer"
+                  className="hover:text-white transition-colors cursor-pointer text-slate-300"
                 >
-                  Location &amp; Directions
+                  Contact &amp; Location
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Popular Services */}
+          {/* Services */}
           <div>
-            <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider mb-3">
-              Core Services
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 border-b border-white/10 pb-2">
+              Our Services
             </h4>
-            <ul className="space-y-2 text-xs text-zinc-500">
-              <li>Computerized Diagnostic Scan</li>
-              <li>3D Laser Wheel Alignment</li>
-              <li>Touchless Tyre Mounting &amp; Balancing</li>
-              <li>OEM Ceramic Brake Pad Service</li>
-              <li>Suspension &amp; Undercarriage Overhaul</li>
-              <li>Synthetic Oil &amp; Filter Service</li>
+            <ul className="space-y-2.5 text-xs text-slate-300">
+              {SERVICES_LIST.map((s) => (
+                <li key={s.id}>
+                  <button
+                    onClick={() => handleNav('services')}
+                    className="hover:text-white transition-colors text-left cursor-pointer"
+                  >
+                    {s.name}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Workshop Contact & Hours */}
+          {/* Contact Details */}
           <div>
-            <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider mb-3">
-              Visit Workshop
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 border-b border-white/10 pb-2">
+              Contact
             </h4>
-            <div className="space-y-2 text-xs">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
+            <div className="space-y-2.5 text-xs text-slate-300">
+              <div className="flex items-start gap-2.5">
+                <MapPin className="w-3.5 h-3.5 text-[#F97316] shrink-0 mt-0.5" />
                 <span>{DYNAMIC_AUTO_INFO.address}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-zinc-400 shrink-0" />
-                <span>{DYNAMIC_AUTO_INFO.hours}</span>
-              </div>
-              <div className="flex items-center gap-2 pt-1">
-                <Phone className="w-4 h-4 text-zinc-400 shrink-0" />
-                <a href={`tel:${DYNAMIC_AUTO_INFO.phone}`} className="hover:text-orange-600 font-medium">
+              <div className="flex items-center gap-2.5">
+                <Phone className="w-3.5 h-3.5 text-[#F97316] shrink-0" />
+                <a href={`tel:${DYNAMIC_AUTO_INFO.phone}`} className="hover:text-white font-medium text-white">
                   {DYNAMIC_AUTO_INFO.phoneDisplay}
                 </a>
               </div>
-              <div className="pt-2">
+              <div className="flex items-center gap-2.5">
+                <Mail className="w-3.5 h-3.5 text-[#F97316] shrink-0" />
+                <a href={`mailto:${DYNAMIC_AUTO_INFO.email}`} className="hover:text-white">
+                  {DYNAMIC_AUTO_INFO.email}
+                </a>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span>{DYNAMIC_AUTO_INFO.hours}</span>
+              </div>
+              <div className="pt-3">
                 <a
                   href={`https://wa.me/${DYNAMIC_AUTO_INFO.whatsapp}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-medium text-orange-600 hover:text-orange-700"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-green-600 hover:bg-green-700 text-white text-xs font-semibold transition-colors"
                 >
                   <MessageSquare className="w-3.5 h-3.5" />
-                  Chat on WhatsApp Desk
+                  Chat on WhatsApp
                   <ArrowUpRight className="w-3 h-3" />
                 </a>
               </div>
@@ -146,14 +149,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
         </div>
 
-        {/* Bottom bar */}
-        <div className="pt-6 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
-          <p>© {new Date().getFullYear()} Dynamic Auto &amp; Tyre Centre. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <span>Isolo, Lagos, Nigeria</span>
-            <span>·</span>
-            <span>Certified Diagnostic &amp; Alignment Centre</span>
-          </div>
+        {/* Bottom copyright */}
+        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+          <p>© 2026 Dynamic Auto. All Rights Reserved.</p>
+          <p>Plot 12, Isolo Expressway Industrial Zone, Lagos, Nigeria</p>
         </div>
       </div>
     </footer>

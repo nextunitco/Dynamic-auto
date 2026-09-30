@@ -1,232 +1,106 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { PageId } from '../components/Navbar';
+import { PageHero } from '../components/PageHero';
 import { 
   SERVICES_LIST, 
-  ServiceItem, 
   SERVICE_PACKAGES, 
-  WORKSHOP_FAQS, 
-  REAL_IMAGES, 
-  formatNgn,
-  createWhatsAppBookingLink,
-  DYNAMIC_AUTO_INFO
+  PAGE_HERO_IMAGES,
+  DYNAMIC_AUTO_INFO,
+  createWhatsAppServiceInquiry 
 } from '../data/businessData';
 import { 
-  Clock, 
-  CheckCircle2, 
-  ArrowRight, 
+  Cpu, 
+  Compass, 
   Wrench, 
-  ShieldCheck, 
-  Sparkles, 
-  Calendar,
+  Gauge, 
+  CheckCircle2, 
+  Check, 
+  Clock, 
+  ArrowRight,
   MessageSquare,
-  HelpCircle,
-  Check
+  ShieldCheck 
 } from 'lucide-react';
 
 interface ServicesPageProps {
   onNavigate: (page: PageId) => void;
-  onOpenBookingModal: (serviceId?: string) => void;
 }
 
-export const ServicesPage: React.FC<ServicesPageProps> = ({
-  onNavigate,
-  onOpenBookingModal,
-}) => {
-  const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
-
-  const categories = [
-    { id: 'all', label: 'All Services' },
-    { id: 'diagnostics', label: 'Diagnostics & ECU' },
-    { id: 'tyres', label: 'Tyres & Alignment' },
-    { id: 'mechanical', label: 'Brakes & Suspension' },
-    { id: 'maintenance', label: 'Oil & Scheduled Service' },
-  ];
-
-  const filteredServices = activeCategory === 'all'
-    ? SERVICES_LIST
-    : SERVICES_LIST.filter(s => s.category === activeCategory);
-
+export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
   return (
-    <div className="bg-white">
-      {/* Header */}
-      <section className="pt-8 pb-10 border-b border-zinc-100 bg-zinc-50/50">
+    <div className="bg-[#F5F8FC]">
+      
+      {/* 1. VEHICLE IMAGE HEADER (300-400px with dark blue overlay) */}
+      <PageHero
+        title="OUR SERVICES"
+        subtitle="Computer diagnostics, 3D laser alignment, brake systems, touchless tyre mounting, and routine scheduled maintenance."
+        backgroundImage={PAGE_HERO_IMAGES.services}
+        currentPageName="Services"
+        onNavigate={onNavigate}
+      />
+
+      {/* 2. SERVICES INTRODUCTION & CARDS */}
+      <section className="py-14 sm:py-18">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <span className="text-xs font-bold text-orange-600 tracking-wider uppercase">
-              Workshop Services
+          <div className="max-w-2xl mb-10">
+            <span className="text-xs font-bold text-[#0B3D91] uppercase tracking-wider">
+              SPECIALIZED WORKSHOP SERVICES
             </span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 mt-1 tracking-tight">
-              Precision Auto Services &amp; Packages
-            </h1>
-            <p className="text-sm text-zinc-600 mt-2 leading-relaxed">
-              Transparent Nigerian Naira pricing, certified European diagnostic computers, and genuine OEM parts. Every service includes our multi-point vehicle health report.
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#062B63] mt-1 font-heading">
+              Precision Automotive Care
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+              Every service is carried out using calibrated machinery and dealer-grade diagnostic scanners to ensure vehicle safety and long-term durability.
             </p>
           </div>
 
-          {/* Category Filter Tabs */}
-          <div className="mt-8 flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-3.5 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
-                  activeCategory === cat.id
-                    ? 'bg-zinc-900 text-white shadow-xs'
-                    : 'bg-white text-zinc-700 border border-zinc-200 hover:bg-zinc-100'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services Grid */}
-      <section className="py-12 border-b border-zinc-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredServices.map((service) => (
+          {/* Clean Service Cards with Blue Icons & Orange subtle CTA */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {SERVICES_LIST.map((service) => (
               <div
                 key={service.id}
-                className="bg-white rounded-lg border border-zinc-200 p-6 flex flex-col justify-between hover:border-zinc-300 hover:shadow-xs transition-all"
+                className="bg-white rounded-lg border border-slate-200 p-6 hover:border-slate-300 shadow-xs transition-colors flex flex-col justify-between"
               >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between text-xs text-zinc-500">
-                    <span className="font-semibold uppercase tracking-wider text-orange-600">
-                      {service.category}
-                    </span>
-                    <span className="flex items-center gap-1 font-medium">
-                      <Clock className="w-3.5 h-3.5 text-zinc-400" />
-                      {service.estimatedDuration}
-                    </span>
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded bg-blue-50 text-[#0B3D91] flex items-center justify-center border border-blue-100">
+                    {service.category === 'diagnostics' && <Cpu className="w-5 h-5" />}
+                    {service.category === 'tyres' && <Compass className="w-5 h-5" />}
+                    {service.category === 'mechanical' && <Wrench className="w-5 h-5" />}
+                    {service.category === 'maintenance' && <Gauge className="w-5 h-5" />}
                   </div>
 
-                  <div>
-                    <h3 className="text-lg font-bold text-zinc-900 leading-snug">
-                      {service.name}
-                    </h3>
-                    <p className="text-xs text-zinc-600 mt-2 leading-relaxed">
-                      {service.description}
-                    </p>
-                  </div>
-
-                  <div className="pt-2 border-t border-zinc-100 space-y-1.5">
-                    <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wide block">
-                      Key Highlights:
-                    </span>
-                    {service.features.map((feat, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-zinc-700">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{feat}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-5 mt-5 border-t border-zinc-100 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] text-zinc-400 uppercase block font-medium">Estimated Cost</span>
-                    <span className="text-base font-bold text-zinc-900">
-                      {formatNgn(service.estimatedPriceNgn)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => onOpenBookingModal(service.id)}
-                      className="px-3.5 py-1.5 text-xs font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded transition-colors cursor-pointer"
-                    >
-                      Book Service
-                    </button>
-                    <a
-                      href={createWhatsAppBookingLink(service.name)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="p-1.5 text-zinc-500 hover:text-green-600 border border-zinc-200 rounded hover:border-green-300 transition-colors"
-                      title="Inquire on WhatsApp"
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Routine Service Packages Comparison */}
-      <section className="py-14 bg-zinc-50 border-b border-zinc-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs font-bold text-orange-600 tracking-wider uppercase">
-              Transparent Maintenance Plans
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1">
-              Choose a Service Package
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-600 mt-2">
-              Structured maintenance packages tailored for driving conditions across Lagos and Nigeria.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {SERVICE_PACKAGES.map((pkg) => (
-              <div
-                key={pkg.id}
-                className={`bg-white rounded-xl border p-6 flex flex-col justify-between transition-all ${
-                  pkg.badge
-                    ? 'border-orange-500 shadow-sm relative'
-                    : 'border-zinc-200'
-                }`}
-              >
-                <div>
-                  {pkg.badge && (
-                    <span className="inline-block mb-3 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-orange-700 rounded">
-                      {pkg.badge}
-                    </span>
-                  )}
-                  <h3 className="text-lg font-bold text-zinc-900">
-                    {pkg.name}
+                  <h3 className="font-bold text-base text-[#172033]">
+                    {service.name}
                   </h3>
-                  <p className="text-xs text-zinc-500 mt-1">
-                    {pkg.recommendedFor} · {pkg.duration}
+
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {service.summary}
                   </p>
 
-                  <div className="my-5 pb-4 border-b border-zinc-100">
-                    <span className="text-2xl font-extrabold text-zinc-900">
-                      {formatNgn(pkg.priceNgn)}
-                    </span>
-                    <span className="text-xs text-zinc-500 block mt-0.5">
-                      Includes labor, fluids &amp; consumables
-                    </span>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block">
-                      What&apos;s Included:
-                    </span>
-                    {pkg.includes.map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-zinc-700">
-                        <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </div>
+                  <ul className="pt-2 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                    {service.features.map((feat, idx) => (
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#0B3D91] shrink-0 mt-0.5" />
+                        <span>{feat}</span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
 
-                <div className="pt-6 mt-6 border-t border-zinc-100">
-                  <button
-                    onClick={() => onOpenBookingModal(pkg.id)}
-                    className={`w-full py-2.5 text-xs font-bold rounded-md transition-colors cursor-pointer ${
-                      pkg.badge
-                        ? 'bg-orange-500 hover:bg-orange-600 text-white'
-                        : 'bg-zinc-900 hover:bg-zinc-800 text-white'
-                    }`}
+                <div className="pt-5 mt-5 border-t border-slate-100 flex items-center justify-between">
+                  <a
+                    href={createWhatsAppServiceInquiry(service.name)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs font-semibold text-white bg-[#F97316] hover:bg-[#EA580C] px-3.5 py-1.5 rounded transition-colors inline-flex items-center gap-1.5 shadow-xs"
                   >
-                    Select {pkg.name}
+                    <MessageSquare className="w-3 h-3" />
+                    Inquire / Book
+                  </a>
+                  <button
+                    onClick={() => onNavigate('contact')}
+                    className="text-xs font-medium text-slate-500 hover:text-[#0B3D91] cursor-pointer"
+                  >
+                    Contact Desk
                   </button>
                 </div>
               </div>
@@ -235,101 +109,154 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
         </div>
       </section>
 
-      {/* Real Workshop Photo Banner with Equipment Standards */}
-      <section className="py-12 border-b border-zinc-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="bg-white rounded-xl border border-zinc-200 overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center">
-            <div className="lg:col-span-5 h-64 lg:h-full min-h-[280px]">
-              <img
-                src={REAL_IMAGES.workshopBay}
-                alt="Dynamic Auto Workshop bay in Lagos"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="lg:col-span-7 p-6 sm:p-8 space-y-4">
-              <span className="text-xs font-bold text-orange-600 uppercase tracking-wider">
-                Workshop Standards
-              </span>
-              <h3 className="text-xl sm:text-2xl font-bold text-zinc-900">
-                Dealer-Standard Diagnostics Without Dealer Markups
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
-                We invest in real diagnostic machinery so you never spend money guessing parts. Every mechanical intervention is backed by digital scans before and after repairs.
-              </p>
-              <div className="grid grid-cols-2 gap-3 text-xs text-zinc-700 pt-2">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Itemized written invoice</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Old parts returned to you</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-orange-500 shrink-0" />
-                  <span>Prompt bay reservation</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Wrench className="w-4 h-4 text-blue-600 shrink-0" />
-                  <span>Calibrated torque specs</span>
-                </div>
-              </div>
+      {/* 3. LARGE AUTOMOTIVE IMAGE SECTION (SUPPORTING VISUAL) */}
+      <section className="relative h-[360px] sm:h-[420px] overflow-hidden flex items-center">
+        <img
+          src="/images/vehicles/vehicle-01.jpg"
+          alt="Workshop Service Bays and Vehicle Alignment"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(90deg, rgba(6,43,99,0.92) 0%, rgba(6,43,99,0.65) 60%, rgba(0,0,0,0.35) 100%)'
+          }}
+        />
 
-              <div className="pt-3">
-                <button
-                  onClick={() => onNavigate('workshop')}
-                  className="text-xs font-semibold text-orange-600 hover:text-orange-700 inline-flex items-center gap-1 cursor-pointer"
-                >
-                  Tour our equipment &amp; facility <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full text-white space-y-3">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#F97316]">
+            AUTHENTIC FACILITY &amp; MACHINERY
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight font-heading max-w-lg leading-tight">
+            High-Precision Diagnostic &amp; Alignment Equipment
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-200 max-w-md leading-relaxed">
+            Our active workshop floor on Isolo Expressway features heavy-duty hydraulic lifts and computerized 3D laser alignment sensors for accurate undercarriage checks.
+          </p>
+          <div className="pt-2">
+            <button
+              onClick={() => onNavigate('about')}
+              className="px-5 py-2.5 text-xs font-bold text-white bg-[#0B3D91] hover:bg-[#062B63] rounded border border-white/20 transition-colors inline-flex items-center gap-2 cursor-pointer"
+            >
+              Tour Our Facility
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Service FAQs */}
-      <section className="py-14 bg-zinc-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-8">
-            <span className="text-xs font-bold text-orange-600 tracking-wider uppercase">
-              Frequently Asked Questions
+      {/* 4. ADDITIONAL INFORMATION (SERVICE PACKAGES) */}
+      <section className="py-14 sm:py-18 bg-white border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center max-w-xl mx-auto mb-10">
+            <span className="text-xs font-bold text-[#0B3D91] uppercase tracking-wider">
+              STRUCTURED PACKAGES
             </span>
-            <h2 className="text-2xl font-bold text-zinc-900 mt-1">
-              Workshop Service Queries
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#062B63] mt-1 font-heading">
+              Maintenance Packages
             </h2>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Clear maintenance plans tailored for Lagos traffic and inter-state highway travel.
+            </p>
           </div>
 
-          <div className="space-y-4">
-            {WORKSHOP_FAQS.map((faq, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {SERVICE_PACKAGES.map((pkg) => (
               <div
-                key={idx}
-                className="bg-white rounded-lg border border-zinc-200 p-5 space-y-2 shadow-xs"
+                key={pkg.id}
+                className={`bg-[#F5F8FC] rounded-lg border p-6 flex flex-col justify-between ${
+                  pkg.badge
+                    ? 'border-[#0B3D91] shadow-xs relative'
+                    : 'border-slate-200'
+                }`}
               >
-                <h4 className="text-sm font-bold text-zinc-900 flex items-start gap-2">
-                  <HelpCircle className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
-                  <span>{faq.question}</span>
-                </h4>
-                <p className="text-xs text-zinc-600 pl-6 leading-relaxed">
-                  {faq.answer}
-                </p>
+                <div>
+                  {pkg.badge && (
+                    <span className="inline-block mb-3 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-[#0B3D91] rounded">
+                      {pkg.badge}
+                    </span>
+                  )}
+                  <h3 className="text-base font-bold text-[#062B63]">
+                    {pkg.name}
+                  </h3>
+                  <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1 mb-4">
+                    <Clock className="w-3.5 h-3.5 text-slate-400" />
+                    <span>{pkg.duration} · {pkg.recommendedFor}</span>
+                  </div>
+
+                  <div className="space-y-2 pt-2 border-t border-slate-200 text-xs text-slate-700">
+                    <span className="font-semibold text-slate-600 block text-[11px] uppercase tracking-wide">
+                      What&apos;s Included:
+                    </span>
+                    {pkg.includes.map((item, idx) => (
+                      <div key={idx} className="flex items-start gap-2">
+                        <Check className="w-3.5 h-3.5 text-[#0B3D91] shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-6 mt-6 border-t border-slate-200">
+                  <a
+                    href={createWhatsAppServiceInquiry(pkg.name)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full py-2.5 text-xs font-semibold text-white bg-[#0B3D91] hover:bg-[#062B63] rounded transition-colors text-center block"
+                  >
+                    Select {pkg.name}
+                  </a>
+                </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mt-8 text-center text-xs text-zinc-500">
-            Have a custom question about your vehicle?{' '}
+      {/* 5. CTA WITH AUTOMOTIVE BACKGROUND IMAGE */}
+      <section className="relative py-16 sm:py-20 overflow-hidden flex items-center">
+        <img
+          src="/images/vehicles/vehicle-08.jpg"
+          alt="Ford Explorer 4WD Vehicle"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(90deg, rgba(6,43,99,0.92) 0%, rgba(6,43,99,0.80) 100%)'
+          }}
+        />
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center text-white space-y-4">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#F97316]">
+            BOOK YOUR APPOINTMENT
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight font-heading">
+            Need a Diagnostic Scan or Wheel Alignment?
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-200 max-w-md mx-auto leading-relaxed">
+            Reserve your workshop bay slot or send your vehicle specs to our technicians on WhatsApp.
+          </p>
+          <div className="pt-3 flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => onNavigate('contact')}
+              className="px-6 py-3 text-xs sm:text-sm font-bold text-white bg-[#F97316] hover:bg-[#EA580C] rounded-md transition-colors shadow-md cursor-pointer"
+            >
+              CONTACT SERVICE DESK
+            </button>
             <a
               href={`https://wa.me/${DYNAMIC_AUTO_INFO.whatsapp}`}
               target="_blank"
               rel="noreferrer"
-              className="text-orange-600 font-bold hover:underline"
+              className="px-6 py-3 text-xs sm:text-sm font-bold text-white bg-green-600 hover:bg-green-700 rounded-md transition-colors shadow-md inline-flex items-center gap-2"
             >
-              Ask our service manager directly on WhatsApp
+              <MessageSquare className="w-4 h-4" />
+              WHATSAPP US
             </a>
           </div>
         </div>
       </section>
+
     </div>
   );
 };

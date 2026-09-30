@@ -1,214 +1,208 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { PageId } from '../components/Navbar';
+import { HeroSlideshow } from '../components/HeroSlideshow';
 import { 
   DYNAMIC_AUTO_INFO, 
-  REAL_IMAGES, 
+  CLIENT_VEHICLES, 
   SERVICES_LIST, 
-  TYRES_CATALOG, 
-  TESTIMONIALS, 
-  formatNgn 
+  WHY_CHOOSE_US,
+  createWhatsAppVehicleInquiry 
 } from '../data/businessData';
 import { 
   ArrowRight, 
-  CheckCircle2, 
-  ShieldCheck, 
   Wrench, 
-  Gauge, 
   Compass, 
-  Phone, 
-  MessageSquare, 
-  Sparkles, 
+  ShieldCheck, 
   Clock, 
+  CheckCircle2, 
   ChevronRight,
-  MapPin,
-  Star
+  MessageSquare,
+  Cpu,
+  Gauge,
+  Phone,
+  Car
 } from 'lucide-react';
 
 interface HomePageProps {
   onNavigate: (page: PageId) => void;
-  onOpenBookingModal: (serviceId?: string) => void;
+  onSelectVehicle?: (vehicleId: string) => void;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({
-  onNavigate,
-  onOpenBookingModal,
-}) => {
-  const [quickRim, setQuickRim] = useState<number>(17);
-
-  const featuredTyres = TYRES_CATALOG.filter(t => t.rim === quickRim).slice(0, 3);
+export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectVehicle }) => {
+  // Show 4 featured vehicles from client photographs
+  const featuredVehicles = CLIENT_VEHICLES.filter(v => v.category !== 'Facility').slice(0, 4);
 
   return (
-    <div className="bg-white">
-      {/* Hero Section */}
-      <section className="relative pt-6 pb-14 border-b border-zinc-100">
+    <div className="bg-[#F5F8FC]">
+      
+      {/* 1. HERO SLIDESHOW (FULL-BLEED BACKGROUND SLIDESHOW) */}
+      <HeroSlideshow onNavigate={onNavigate} />
+
+      {/* 2. SHORT INTRODUCTION */}
+      <section className="py-12 bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            
-            {/* Left Content */}
-            <div className="lg:col-span-6 space-y-5">
-              <div className="inline-flex items-center gap-2 text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1 rounded-full border border-orange-200/60">
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-                Plot 12, Isolo Expressway · Lagos, Nigeria
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-zinc-900 tracking-tight leading-[1.15]">
-                Professional Auto Care &amp; Genuine Tyres Built for Lagos Roads.
-              </h1>
-
-              <p className="text-base text-zinc-600 leading-relaxed max-w-xl">
-                Dealer-grade computer diagnostics, computerized 3D laser wheel alignment, and brand new certified tyres. Zero guesswork, zero counterfeit parts.
-              </p>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <button
-                  onClick={() => onNavigate('booking')}
-                  className="px-5 py-3 text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-md transition-colors shadow-xs inline-flex items-center gap-2 cursor-pointer"
-                >
-                  <Wrench className="w-4 h-4" />
-                  Estimate &amp; Book Service
-                </button>
-                <button
-                  onClick={() => onNavigate('tyres')}
-                  className="px-5 py-3 text-sm font-semibold text-zinc-800 bg-zinc-100 hover:bg-zinc-200 rounded-md transition-colors inline-flex items-center gap-2 cursor-pointer"
-                >
-                  Browse Genuine Tyres
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="pt-4 border-t border-zinc-100 grid grid-cols-3 gap-3 text-xs text-zinc-600">
-                <div className="flex items-start gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>100% Genuine Tyres &amp; Lubricants</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Compass className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
-                  <span>3D Laser Optical Alignment</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Clock className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                  <span>Same-Day Fast Turnaround</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Hero Image Card featuring Real Workshop Photo */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-xl overflow-hidden border border-zinc-200 shadow-sm bg-zinc-100">
-                <img
-                  src={REAL_IMAGES.workshopBay}
-                  alt="Dynamic Auto & Tyre Centre Workshop Bay in Isolo Lagos"
-                  className="w-full h-80 sm:h-96 object-cover"
-                />
-                
-                {/* Floating workshop caption */}
-                <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-xs rounded-lg p-3 border border-zinc-200 shadow-xs flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-bold text-zinc-900">
-                      Dynamic Auto Main Workshop Floor
-                    </p>
-                    <p className="text-[11px] text-zinc-500">
-                      Active diagnostic bays, hydraulic lifts &amp; computerized test equipment
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => onNavigate('workshop')}
-                    className="text-xs font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1 shrink-0"
-                  >
-                    View Facility <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
+          <div className="max-w-3xl mx-auto text-center space-y-3">
+            <span className="text-xs font-bold text-[#0B3D91] uppercase tracking-widest">
+              WELCOME TO DYNAMIC AUTO
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#062B63] font-heading">
+              Precision Automotive Care &amp; Inspected Vehicles
+            </h2>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Located on the Isolo Expressway industrial corridor in Lagos, Dynamic Auto provides dealer-level computer diagnostics, 3D laser wheel alignment, scratch-free tyre fitting, and a curated inventory of inspected vehicles. We deliver honest craftsmanship without guesswork.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Real Photos & Facility Showcase */}
-      <section className="py-14 bg-zinc-50 border-b border-zinc-200">
+      {/* 3. FEATURED VEHICLES (LARGE VEHICLE CARDS) */}
+      <section className="py-14 sm:py-18">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
             <div>
-              <span className="text-xs font-bold text-orange-600 tracking-wider uppercase">
-                Authentic Facility &amp; Certified Technicians
+              <span className="text-xs font-bold text-[#0B3D91] uppercase tracking-wider">
+                FEATURED INVENTORY
               </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1">
-                See Inside Our Isolo Workshop
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#062B63] mt-1 font-heading">
+                Explore Available Vehicles
               </h2>
-              <p className="text-sm text-zinc-600 mt-1 max-w-xl">
-                Real photos from our operational service center. Equipped with high-precision European equipment for clean, damage-free repairs.
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-xl">
+                Browse verified client vehicles available for viewing and inspection at our Isolo workshop.
               </p>
             </div>
             <button
-              onClick={() => onNavigate('workshop')}
-              className="text-xs font-semibold text-orange-600 hover:text-orange-700 inline-flex items-center gap-1 self-start sm:self-auto cursor-pointer"
+              onClick={() => onNavigate('vehicles')}
+              className="text-xs font-semibold text-[#0B3D91] hover:text-[#062B63] inline-flex items-center gap-1 self-start sm:self-auto cursor-pointer"
             >
-              Explore Equipment Specs <ArrowRight className="w-3.5 h-3.5" />
+              View Full Inventory <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            {/* Real Photo 1: Workshop Bay */}
-            <div className="bg-white rounded-lg border border-zinc-200 overflow-hidden shadow-xs group">
-              <div className="relative h-64 overflow-hidden bg-zinc-100">
-                <img
-                  src={REAL_IMAGES.workshopBay}
-                  alt="Dynamic Auto Diagnostic and Mechanical Service Bay"
-                  className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
-                />
-                <span className="absolute top-3 left-3 bg-zinc-900/80 text-white text-[11px] font-medium px-2.5 py-1 rounded">
-                  Facility Bay 1 · Diagnostics &amp; Alignment
-                </span>
-              </div>
-              <div className="p-4 space-y-2">
-                <h3 className="font-bold text-zinc-900 text-base">
-                  Hydraulic Vehicle Lifts &amp; Laser Alignment Bay
-                </h3>
-                <p className="text-xs text-zinc-600 leading-relaxed">
-                  Clean, well-illuminated bays allow detailed undercarriage inspections for shock absorbers, control arm bushings, steering tie-rods, and exhaust systems.
-                </p>
-                <div className="pt-2 flex items-center justify-between text-xs text-zinc-500 border-t border-zinc-100">
-                  <span>Hunter-spec optical targets</span>
-                  <button
-                    onClick={() => onOpenBookingModal('wheel-alignment')}
-                    className="text-orange-600 font-semibold hover:underline"
-                  >
-                    Book Alignment
-                  </button>
+          {/* Cards with Subtle Hover Zoom: transform scale(1.03) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredVehicles.map((car) => (
+              <div
+                key={car.id}
+                className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="aspect-[4/3] bg-slate-100 overflow-hidden relative">
+                    <img
+                      src={car.image}
+                      alt={car.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                    />
+                    {car.tag && (
+                      <span className="absolute top-2.5 left-2.5 bg-[#0B3D91] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
+                        {car.tag}
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-4 space-y-1">
+                    <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide block">
+                      {car.category}
+                    </span>
+                    <h3 className="font-bold text-base text-[#172033] line-clamp-1">
+                      {car.title}
+                    </h3>
+                  </div>
                 </div>
+
+                <div className="px-4 pb-4 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <button
+                    onClick={() => onNavigate('vehicles')}
+                    className="text-xs font-semibold text-[#0B3D91] hover:text-[#062B63] cursor-pointer"
+                  >
+                    View Details
+                  </button>
+                  <a
+                    href={createWhatsAppVehicleInquiry(car.title)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3 py-1.5 text-xs font-semibold text-white bg-[#F97316] hover:bg-[#EA580C] rounded transition-colors inline-flex items-center gap-1 shadow-xs"
+                  >
+                    <MessageSquare className="w-3 h-3" />
+                    Inquire
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <button
+              onClick={() => onNavigate('vehicles')}
+              className="px-6 py-3 text-xs sm:text-sm font-bold text-white bg-[#0B3D91] hover:bg-[#062B63] rounded-md transition-colors shadow-xs inline-flex items-center gap-2 cursor-pointer"
+            >
+              VIEW ALL VEHICLES
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. ABOUT DYNAMIC AUTO (TEXT + LARGE VEHICLE IMAGE SPLIT LAYOUT) */}
+      <section className="py-14 sm:py-18 bg-white border-y border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            {/* Left: Text */}
+            <div className="lg:col-span-6 space-y-4">
+              <span className="text-xs font-bold text-[#0B3D91] uppercase tracking-wider">
+                ABOUT DYNAMIC AUTO
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#062B63] font-heading">
+                Engineering Integrity on Lagos Roads
+              </h2>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Automotive ownership in Lagos requires dependable workshop care. We operate with radical transparency: our certified technicians scan vehicles with bi-directional OBD scanners, mount tyres using touchless leverless machinery, and present old replaced parts for customer confirmation.
+              </p>
+
+              <div className="space-y-2.5 pt-2 text-xs text-slate-700">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#0B3D91] shrink-0 mt-0.5" />
+                  <span>Dealer-grade diagnostics without guesswork</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#0B3D91] shrink-0 mt-0.5" />
+                  <span>Precision 3D optical laser wheel alignment</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#0B3D91] shrink-0 mt-0.5" />
+                  <span>100% genuine lubricants and direct-sourced tyres</span>
+                </div>
+              </div>
+
+              <div className="pt-3">
+                <button
+                  onClick={() => onNavigate('about')}
+                  className="px-5 py-2.5 text-xs font-semibold text-[#0B3D91] border border-[#0B3D91] hover:bg-[#0B3D91] hover:text-white rounded-md transition-colors inline-flex items-center gap-2 cursor-pointer"
+                >
+                  Learn More About Us
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             </div>
 
-            {/* Real Photo 2: Mechanics & Tyre Station */}
-            <div className="bg-white rounded-lg border border-zinc-200 overflow-hidden shadow-xs group">
-              <div className="relative h-64 overflow-hidden bg-zinc-100">
+            {/* Right: Large Vehicle Photograph */}
+            <div className="lg:col-span-6">
+              <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm relative group bg-slate-100">
                 <img
-                  src={REAL_IMAGES.mechanicsTeam}
-                  alt="Specialist Technicians with Touchless Tyre Changer"
-                  className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+                  src="/images/vehicles/vehicle-01.jpg"
+                  alt="Dynamic Auto Workshop Bay and Laser Alignment"
+                  className="w-full h-80 sm:h-96 object-cover group-hover:scale-102 transition-transform duration-500"
                 />
-                <span className="absolute top-3 left-3 bg-zinc-900/80 text-white text-[11px] font-medium px-2.5 py-1 rounded">
-                  Facility Bay 2 · Touchless Wheel Mounting
-                </span>
-              </div>
-              <div className="p-4 space-y-2">
-                <h3 className="font-bold text-zinc-900 text-base">
-                  Certified Tyre Mounting &amp; Dynamic Balancing
-                </h3>
-                <p className="text-xs text-zinc-600 leading-relaxed">
-                  Our trained technicians use automatic leverless tyre changers to protect sensitive alloy rims from gouges, combined with pure dry nitrogen gas inflation.
-                </p>
-                <div className="pt-2 flex items-center justify-between text-xs text-zinc-500 border-t border-zinc-100">
-                  <span>Touchless mounting · Rim-safe</span>
+                <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-xs rounded p-3 border border-slate-200 flex items-center justify-between text-xs">
+                  <div>
+                    <p className="font-bold text-[#062B63]">Main Service Floor &amp; Alignment Rack</p>
+                    <p className="text-[11px] text-slate-500">Plot 12, Isolo Expressway Industrial Zone</p>
+                  </div>
                   <button
-                    onClick={() => onNavigate('tyres')}
-                    className="text-orange-600 font-semibold hover:underline"
+                    onClick={() => onNavigate('services')}
+                    className="text-xs font-semibold text-[#F97316] hover:underline"
                   >
-                    Browse Tyres
+                    View Services
                   </button>
                 </div>
               </div>
@@ -218,74 +212,62 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* Core Services Section */}
-      <section className="py-14 border-b border-zinc-200">
+      {/* 5. SERVICES (CLEAN SERVICE CARDS WITH BLUE ICONS) */}
+      <section className="py-14 sm:py-18">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
             <div>
-              <span className="text-xs font-bold text-orange-600 tracking-wider uppercase">
-                Specialized Services
+              <span className="text-xs font-bold text-[#0B3D91] uppercase tracking-wider">
+                OUR SERVICES
               </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1">
-                Precision Auto Maintenance
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#062B63] mt-1 font-heading">
+                Specialized Workshop Services
               </h2>
-              <p className="text-sm text-zinc-600 mt-1 max-w-xl">
-                Clear upfront pricing in Nigerian Naira, transparent turnaround times, and verified OEM parts.
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-xl">
+                Diagnostic scans, computerized alignment, tyre mounting, and preventative servicing.
               </p>
             </div>
             <button
               onClick={() => onNavigate('services')}
-              className="text-xs font-semibold text-orange-600 hover:text-orange-700 inline-flex items-center gap-1 cursor-pointer"
+              className="text-xs font-semibold text-[#0B3D91] hover:text-[#062B63] inline-flex items-center gap-1 self-start sm:self-auto cursor-pointer"
             >
-              View All Services &amp; Packages <ArrowRight className="w-3.5 h-3.5" />
+              All Services &amp; Packages <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {SERVICES_LIST.slice(0, 6).map((service) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {SERVICES_LIST.map((service) => (
               <div
                 key={service.id}
-                className="bg-white rounded-lg border border-zinc-200 p-5 hover:border-zinc-300 hover:shadow-xs transition-all flex flex-col justify-between"
+                className="bg-white rounded-lg border border-slate-200 p-6 hover:border-slate-300 shadow-xs transition-colors flex flex-col justify-between"
               >
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
-                      {service.category}
-                    </span>
-                    <span className="text-xs font-medium text-zinc-500 flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-zinc-400" />
-                      {service.estimatedDuration}
-                    </span>
+                  <div className="w-10 h-10 rounded bg-blue-50 text-[#0B3D91] flex items-center justify-center border border-blue-100">
+                    {service.category === 'diagnostics' && <Cpu className="w-5 h-5" />}
+                    {service.category === 'tyres' && <Compass className="w-5 h-5" />}
+                    {service.category === 'mechanical' && <Wrench className="w-5 h-5" />}
+                    {service.category === 'maintenance' && <Gauge className="w-5 h-5" />}
                   </div>
 
-                  <h3 className="font-bold text-zinc-900 text-base">
+                  <h3 className="font-bold text-base text-[#172033]">
                     {service.name}
                   </h3>
 
-                  <p className="text-xs text-zinc-600 line-clamp-2">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     {service.summary}
                   </p>
-
-                  <ul className="space-y-1.5 pt-1 text-xs text-zinc-600">
-                    {service.features.slice(0, 2).map((feat, i) => (
-                      <li key={i} className="flex items-start gap-1.5">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-zinc-100 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] text-zinc-400 uppercase block">Starting from</span>
-                    <span className="text-sm font-bold text-zinc-900">
-                      {formatNgn(service.estimatedPriceNgn)}
-                    </span>
-                  </div>
+                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
                   <button
-                    onClick={() => onOpenBookingModal(service.id)}
-                    className="px-3 py-1.5 text-xs font-semibold text-orange-600 hover:text-white hover:bg-orange-600 border border-orange-300 hover:border-orange-600 rounded transition-colors cursor-pointer"
+                    onClick={() => onNavigate('services')}
+                    className="text-xs font-semibold text-[#0B3D91] hover:text-[#062B63] flex items-center gap-1 cursor-pointer"
+                  >
+                    Learn More <ChevronRight className="w-3 h-3" />
+                  </button>
+                  <button
+                    onClick={() => onNavigate('contact')}
+                    className="text-xs font-semibold text-[#F97316] hover:underline cursor-pointer"
                   >
                     Book Now
                   </button>
@@ -296,171 +278,124 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* Tyre Quick Finder Strip */}
-      <section className="py-12 bg-zinc-50 border-b border-zinc-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="bg-white rounded-xl border border-zinc-200 p-6 sm:p-8 shadow-xs">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-6">
-              <div>
-                <span className="text-xs font-bold text-orange-600 tracking-wider uppercase">
-                  Tyre Sizing &amp; Fitting
-                </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 mt-1">
-                  Find Tyres for Your Rim Size
-                </h3>
-                <p className="text-xs sm:text-sm text-zinc-600 mt-1">
-                  Complimentary touchless fitting, high-speed balancing, and fresh DOT dates on all models.
-                </p>
-              </div>
+      {/* 6. FULL-WIDTH AUTOMOTIVE IMAGE SECTION (350-500px tall) */}
+      <section className="relative h-[380px] sm:h-[450px] overflow-hidden flex items-center">
+        <img
+          src="/images/vehicles/vehicle-04.jpg"
+          alt="Lexus RX 350 Luxury Vehicle"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        
+        {/* Dark blue overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(90deg, rgba(6,43,99,0.92) 0%, rgba(6,43,99,0.65) 60%, rgba(0,0,0,0.40) 100%)'
+          }}
+        />
 
-              {/* Rim diameter selector tabs */}
-              <div className="flex items-center gap-1.5 bg-zinc-100 p-1 rounded-lg">
-                {[15, 16, 17, 18].map((rim) => (
-                  <button
-                    key={rim}
-                    onClick={() => setQuickRim(rim)}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors cursor-pointer ${
-                      quickRim === rim
-                        ? 'bg-white text-zinc-900 shadow-xs'
-                        : 'text-zinc-600 hover:text-zinc-900'
-                    }`}
-                  >
-                    R{rim}&quot;
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Featured tyres for this rim */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {featuredTyres.map((tyre) => (
-                <div
-                  key={tyre.id}
-                  className="bg-zinc-50 rounded-lg p-4 border border-zinc-200 flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-bold text-zinc-900">{tyre.brand}</span>
-                      <span className="text-zinc-500 font-mono text-[11px]">{tyre.type}</span>
-                    </div>
-                    <div className="text-sm font-extrabold text-orange-600 mb-1">
-                      {tyre.size}
-                    </div>
-                    <div className="text-xs text-zinc-600 mb-2 font-medium">
-                      {tyre.model}
-                    </div>
-                    <span className="text-[11px] text-zinc-500 block">
-                      {tyre.warranty} · In Stock
-                    </span>
-                  </div>
-
-                  <div className="pt-3 mt-3 border-t border-zinc-200 flex items-center justify-between">
-                    <span className="text-xs font-bold text-zinc-900">
-                      {formatNgn(tyre.priceNgn)} <span className="text-[10px] text-zinc-400 font-normal">/ tyre</span>
-                    </span>
-                    <button
-                      onClick={() => onNavigate('tyres')}
-                      className="text-xs text-orange-600 hover:text-orange-700 font-semibold flex items-center gap-0.5"
-                    >
-                      Details <ChevronRight className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-zinc-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-              <span className="text-zinc-500">
-                Need specialized run-flats or commercial sizes? We have over 20+ sizes in stock.
-              </span>
-              <button
-                onClick={() => onNavigate('tyres')}
-                className="text-orange-600 hover:text-orange-700 font-bold inline-flex items-center gap-1 self-start sm:self-auto cursor-pointer"
-              >
-                Go to Full Tyre Showroom <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full text-white space-y-4">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#F97316]">
+            PREMIUM AUTOMOTIVE EXPERIENCE
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight font-heading max-w-xl leading-tight">
+            Your Journey Starts Here.
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-200 max-w-lg leading-relaxed">
+            Whether you need precision diagnostics before a long highway trip or are looking for a reliable vehicle inspected by our workshop engineers, Dynamic Auto is your trusted partner.
+          </p>
+          <div className="pt-2">
+            <button
+              onClick={() => onNavigate('vehicles')}
+              className="px-6 py-3 text-xs sm:text-sm font-bold text-white bg-[#F97316] hover:bg-[#EA580C] rounded-md transition-colors shadow-md inline-flex items-center gap-2 cursor-pointer"
+            >
+              VIEW OUR VEHICLES
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Customer Testimonials & Road Conditions */}
-      <section className="py-14 border-b border-zinc-200">
+      {/* 7. WHY CHOOSE DYNAMIC AUTO (4 PILLARS) */}
+      <section className="py-14 sm:py-18 bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs font-bold text-orange-600 tracking-wider uppercase">
-              Customer Feedback
+          <div className="text-center max-w-xl mx-auto mb-10">
+            <span className="text-xs font-bold text-[#0B3D91] uppercase tracking-wider">
+              OUR PILLARS
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1">
-              Trusted by Lagos Drivers
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#062B63] mt-1 font-heading">
+              Why Choose Dynamic Auto
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-600 mt-2">
-              From daily commuters to luxury car owners, here is what our customers say about our workshop transparency.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Dependable automotive care grounded in verified equipment and customer trust.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t, idx) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {WHY_CHOOSE_US.map((item, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-lg border border-zinc-200 p-6 flex flex-col justify-between shadow-xs"
+                className="bg-[#F5F8FC] rounded-lg border border-slate-200 p-6 space-y-2 shadow-xs"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center gap-1 text-amber-500">
-                    {[...Array(t.rating)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-amber-400 stroke-none" />
-                    ))}
-                  </div>
-                  <p className="text-xs text-zinc-700 leading-relaxed italic">
-                    &quot;{t.quote}&quot;
-                  </p>
+                <div className="w-8 h-8 rounded bg-white text-[#0B3D91] border border-slate-200 flex items-center justify-center font-bold text-xs shadow-xs">
+                  0{idx + 1}
                 </div>
-                <div className="pt-4 mt-4 border-t border-zinc-100">
-                  <p className="text-xs font-bold text-zinc-900">{t.author}</p>
-                  <p className="text-[11px] text-zinc-500">{t.vehicle} · {t.location}</p>
-                </div>
+                <h3 className="font-bold text-base text-[#172033]">
+                  {item.title}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Quick Booking Callout */}
-      <section className="py-12 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="bg-zinc-900 text-white rounded-xl p-8 sm:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-xl">
-              <span className="text-xs font-bold text-orange-400 uppercase tracking-wider">
-                Fast Bay Reservation
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                Ready to Experience Precise Auto Service?
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-300">
-                Calculate an exact service cost estimate or send your vehicle specs to our workshop engineers on WhatsApp.
-              </p>
-            </div>
+      {/* 8. CTA WITH VEHICLE BACKGROUND */}
+      <section className="relative py-16 sm:py-20 overflow-hidden flex items-center">
+        <img
+          src="/images/vehicles/vehicle-11.jpg"
+          alt="Lexus GX 460 Vehicle"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(90deg, rgba(6,43,99,0.92) 0%, rgba(6,43,99,0.80) 100%)'
+          }}
+        />
 
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <button
-                onClick={() => onNavigate('booking')}
-                className="px-5 py-3 text-xs font-semibold text-zinc-900 bg-white hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
-              >
-                Use Cost Estimator
-              </button>
-              <a
-                href={`https://wa.me/${DYNAMIC_AUTO_INFO.whatsapp}`}
-                target="_blank"
-                rel="noreferrer"
-                className="px-5 py-3 text-xs font-semibold text-white bg-orange-600 hover:bg-orange-500 rounded-md transition-colors inline-flex items-center gap-2"
-              >
-                <MessageSquare className="w-3.5 h-3.5" />
-                WhatsApp Workshop
-              </a>
-            </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center text-white space-y-4">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#F97316]">
+            GET IN TOUCH TODAY
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight font-heading">
+            Ready for Your Next Vehicle or Service Inspection?
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-200 max-w-md mx-auto leading-relaxed">
+            Visit our workshop on Plot 12, Isolo Expressway or chat directly with our service supervisor on WhatsApp.
+          </p>
+          <div className="pt-3 flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => onNavigate('contact')}
+              className="px-6 py-3 text-xs sm:text-sm font-bold text-white bg-[#F97316] hover:bg-[#EA580C] rounded-md transition-colors shadow-md cursor-pointer"
+            >
+              CONTACT US
+            </button>
+            <a
+              href={`https://wa.me/${DYNAMIC_AUTO_INFO.whatsapp}`}
+              target="_blank"
+              rel="noreferrer"
+              className="px-6 py-3 text-xs sm:text-sm font-bold text-white bg-green-600 hover:bg-green-700 rounded-md transition-colors shadow-md inline-flex items-center gap-2"
+            >
+              <MessageSquare className="w-4 h-4" />
+              CHAT ON WHATSAPP
+            </a>
           </div>
         </div>
       </section>
+
     </div>
   );
 };
