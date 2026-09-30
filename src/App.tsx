@@ -1,118 +1,131 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationProvider, useNavigation } from './context/NavigationContext';
-import { Navbar } from './components/Navbar';
+import { Navbar, PageId } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { BookingModal } from './components/BookingModal';
 import { HomePage } from './pages/HomePage';
-import { AboutPage } from './pages/AboutPage';
 import { ServicesPage } from './pages/ServicesPage';
 import { TyresPage } from './pages/TyresPage';
+import { WorkshopPage } from './pages/WorkshopPage';
+import { BookingPage } from './pages/BookingPage';
 import { ContactPage } from './pages/ContactPage';
-import { MessageCircle, ArrowUp } from 'lucide-react';
+import { DYNAMIC_AUTO_INFO } from './data/businessData';
+import { MessageSquare, ArrowUpRight } from 'lucide-react';
 
-function AppContent() {
-  const { currentPage } = useNavigation();
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [bookingPrefill, setBookingPrefill] = useState<{
-    service?: string;
-    phone?: string;
-    name?: string;
-    code?: string;
-  }>({});
+function getPageFromHash(): PageId {
+  const hash = window.location.hash.replace('#/', '').replace('#', '').trim();
+  const validPages: PageId[] = ['home', 'services', 'tyres', 'workshop', 'booking', 'contact'];
+  if (validPages.includes(hash as PageId)) {
+    return hash as PageId;
+  }
+  return 'home';
+}
+
+export function App() {
+  const [currentPage, setCurrentPage] = useState<PageId>(getPageFromHash);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [bookingInitialService, setBookingInitialService] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
+    const handleHashChange = () => {
+      setCurrentPage(getPageFromHash());
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  const scrollToTop = () => {
+  const handleNavigate = (page: PageId) => {
+    setCurrentPage(page);
+    window.location.hash = page === 'home' ? '#/' : `#/${page}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const openBooking = (service?: string, phone?: string, name?: string, code?: string) => {
-    setBookingPrefill({ service, phone, name, code });
-    setIsBookingOpen(true);
+  const handleOpenBookingModal = (serviceId?: string) => {
+    setBookingInitialService(serviceId);
+    setIsBookingModalOpen(true);
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfcfd] text-[#232323] flex flex-col font-sans selection:bg-[#4883ff] selection:text-white relative">
+    <div className="min-h-screen bg-white text-zinc-900 selection:bg-orange-500 selection:text-white flex flex-col font-sans">
       
-      {/* 1. Global Multi-Page Navigation Bar */}
-      <Navbar onOpenBooking={(service) => openBooking(service)} />
+      {/* Top Navbar */}
+      <Navbar 
+        currentPage={currentPage} 
+        onNavigate={handleNavigate}
+        onOpenBookingModal={() => handleOpenBookingModal()}
+      />
 
-      {/* 2. Main Page Content View with smooth opacity transition */}
-      <main className="flex-1 animate-in fade-in duration-200">
+      {/* Dynamic Multi-Page Router View */}
+      <main className="flex-1">
         {currentPage === 'home' && (
-          <HomePage onOpenBooking={(svc) => openBooking(svc)} />
+          <HomePage 
+            onNavigate={handleNavigate} 
+            onOpenBookingModal={handleOpenBookingModal} 
+          />
         )}
-        {currentPage === 'about' && (
-          <AboutPage onOpenBooking={(svc) => openBooking(svc)} />
-        )}
+
         {currentPage === 'services' && (
-          <ServicesPage onOpenBooking={(svc) => openBooking(svc)} />
+          <ServicesPage 
+            onNavigate={handleNavigate} 
+            onOpenBookingModal={handleOpenBookingModal} 
+          />
         )}
+
         {currentPage === 'tyres' && (
-          <TyresPage onOpenBooking={(svc, code) => openBooking(svc, undefined, undefined, code)} />
+          <TyresPage 
+            onNavigate={handleNavigate} 
+            onOpenBookingModal={handleOpenBookingModal} 
+          />
         )}
+
+        {currentPage === 'workshop' && (
+          <WorkshopPage 
+            onNavigate={handleNavigate} 
+            onOpenBookingModal={handleOpenBookingModal} 
+          />
+        )}
+
+        {currentPage === 'booking' && (
+          <BookingPage 
+            onNavigate={handleNavigate} 
+            initialServiceId={bookingInitialService} 
+          />
+        )}
+
         {currentPage === 'contact' && (
-          <ContactPage />
+          <ContactPage 
+            onNavigate={handleNavigate} 
+          />
         )}
       </main>
 
-      {/* 3. Global Multi-Page Footer */}
-      <Footer onOpenBooking={(service) => openBooking(service)} />
+      {/* Clean Global Footer */}
+      <Footer onNavigate={handleNavigate} />
 
-      {/* 4. Service Booking Modal */}
+      {/* Global Booking Modal */}
       <BookingModal
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-        initialService={bookingPrefill.service}
-        initialPhone={bookingPrefill.phone}
-        initialName={bookingPrefill.name}
-        initialCode={bookingPrefill.code}
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+        defaultServiceId={bookingInitialService}
       />
 
-      {/* 5. Classic WordPress Floating Widgets (Back to Top + WhatsApp with Pulse Ring) */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-3">
-        {/* WordPress Back to Top Floating Button */}
-        {showScrollTop && (
-          <button
-            onClick={scrollToTop}
-            className="w-10 h-10 rounded-full bg-white border border-[#dddddd] hover:border-[#4883ff] text-[#232323] hover:text-[#4883ff] flex items-center justify-center shadow-lg transition-all hover:-translate-y-1 cursor-pointer animate-in fade-in slide-in-from-bottom-2 duration-300"
-            title="Scroll to top"
-            aria-label="Scroll to top"
-          >
-            <ArrowUp className="w-4 h-4" />
-          </button>
-        )}
-
-        {/* WhatsApp with Pulsing Radar Ring */}
-        <div className="relative">
-          <span className="absolute -inset-1 rounded-full bg-emerald-500 opacity-60 animate-ping pointer-events-none" />
-          <a
-            href={`https://wa.me/2349126983699?text=${encodeURIComponent("Hello Dynamic Auto & Tyre Centre, I would like to inquire about automotive services.")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative w-12 h-12 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center shadow-xl shadow-emerald-500/30 hover:scale-105 active:scale-95 transition-all group cursor-pointer"
-            title="Chat with Dynamic Auto on WhatsApp"
-          >
-            <MessageCircle className="w-5 h-5 fill-current" />
-          </a>
-        </div>
-      </div>
+      {/* Floating WhatsApp Action Button */}
+      <a
+        href={`https://wa.me/${DYNAMIC_AUTO_INFO.whatsapp}`}
+        target="_blank"
+        rel="noreferrer"
+        className="fixed bottom-5 right-5 z-40 bg-zinc-900 hover:bg-orange-600 text-white px-3.5 py-2.5 rounded-full shadow-lg border border-zinc-700/50 flex items-center gap-2 transition-all duration-200 hover:scale-105 group text-xs font-semibold"
+        aria-label="Chat with Dynamic Auto on WhatsApp"
+      >
+        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+        <MessageSquare className="w-3.5 h-3.5 fill-current text-emerald-400" />
+        <span>WhatsApp Desk</span>
+        <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+      </a>
 
     </div>
   );
 }
 
-export default function App() {
-  return (
-    <NavigationProvider>
-      <AppContent />
-    </NavigationProvider>
-  );
-}
+export default App;

@@ -1,190 +1,27 @@
 @import "tailwindcss";
 
 @layer base {
-  :root {
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-display: 'Space Grotesk', system-ui, sans-serif;
-
-    /* Authentic Dynamic Auto Brand Color Tokens */
-    --brand-primary: #4883ff;        /* Dynamic Blue - defining brand color */
-    --brand-primary-hover: #3470e8;  /* Deep hover shade */
-    --brand-primary-dark: #2151c6;   /* Deep accent */
-    --brand-primary-soft: #edf3ff;   /* Soft background highlight */
-    --brand-charcoal: #232323;       /* Authentic dark tone for headings & dark surfaces */
-    --brand-dark: #121212;           /* Deep contrast tone */
-    --brand-gray: #7a7a7a;           /* Secondary body text */
-    --brand-gray-light: #f4f4f4;     /* Light section background */
-    --brand-border: #dddddd;         /* Authentic border color */
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
   body {
-    font-family: var(--font-sans);
-    background-color: #fcfcfd;
-    color: #232323;
-    overflow-x: hidden;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
-
-  h1, h2, h3, .font-display {
-    font-family: var(--font-display);
-    letter-spacing: -0.02em;
+  
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
   }
 }
 
-/* ==========================================================================
-   WordPress & Elementor Style Animation Keyframes & Utility Classes
-   ========================================================================== */
-
-@keyframes wp-float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-
-@keyframes wp-float-slow {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(1deg);
-  }
+::-webkit-scrollbar-track {
+  background: #f4f4f5;
 }
-
-@keyframes wp-pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(72, 131, 255, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 0 14px rgba(72, 131, 255, 0);
-  }
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 3px;
 }
-
-@keyframes wp-shine {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 200%;
-  }
-}
-
-@keyframes wp-spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes wp-marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-/* Utility animation classes */
-.animate-wp-float {
-  animation: wp-float 3.5s ease-in-out infinite;
-}
-
-.animate-wp-float-slow {
-  animation: wp-float-slow 5s ease-in-out infinite;
-}
-
-.animate-wp-pulse-glow {
-  animation: wp-pulse-glow 2.2s infinite;
-}
-
-.animate-wp-spin-slow {
-  animation: wp-spin-slow 20s linear infinite;
-}
-
-.animate-wp-marquee {
-  display: flex;
-  width: 200%;
-  animation: wp-marquee 25s linear infinite;
-}
-
-.animate-wp-marquee:hover {
-  animation-play-state: paused;
-}
-
-/* Elementor button shine effect */
-.wp-btn-shine {
-  position: relative;
-  overflow: hidden;
-}
-
-.wp-btn-shine::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -100%;
-  width: 50%;
-  height: 200%;
-  background: linear-gradient(
-    60deg,
-    rgba(255, 255, 255, 0) 20%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0) 80%
-  );
-  transform: rotate(25deg);
-  transition: all 0.75s ease;
-}
-
-.wp-btn-shine:hover::after {
-  left: 200%;
-}
-
-/* WordPress Elementor Card Hover Lift */
-.wp-card-hover {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
-}
-
-.wp-card-hover:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 32px -8px rgba(72, 131, 255, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
-}
-
-/* Elementor Shape Divider (SVG wave / angles) */
-.wp-shape-divider {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-  transform: rotate(180deg);
-}
-
-.wp-shape-divider svg {
-  position: relative;
-  display: block;
-  width: calc(100% + 1.3px);
-  height: 48px;
-}
-
-/* Blueprint grids */
-.automotive-blueprint-grid {
-  background-size: 36px 36px;
-  background-image: 
-    linear-gradient(to right, rgba(72, 131, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(72, 131, 255, 0.05) 1px, transparent 1px);
-}
-
-.automotive-dark-grid {
-  background-size: 36px 36px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+::-webkit-scrollbar-thumb:hover {
+  background: #f97316;
 }

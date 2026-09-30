@@ -1,6 +1,6 @@
 {
   "name": "Dynamic Auto & Tyre Centre",
-  "description": "Premium redesigned web experience for Dynamic Auto & Tyre Centre, Lagos. Explore vehicle repairs, tyre fitting, wheel balancing, MOT roadworthiness tests, and battery services.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "description": "Premium automotive service and tyre centre in Isolo, Lagos, Nigeria. Providing professional vehicle maintenance, computer diagnostics, 3D wheel alignment, brake services, and genuine tyres.",
+  "permissions": [],
+  "capabilities": []
 }
